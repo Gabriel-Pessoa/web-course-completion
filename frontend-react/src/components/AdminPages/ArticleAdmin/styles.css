@@ -1,0 +1,10 @@
+.table th {
+    background-color: #ddd9c9;
+}
+.actions {
+    display: flex;
+    justify-content: center;
+}
+.align-to-center {
+    text-align: center;
+}
