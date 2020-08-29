@@ -9,7 +9,7 @@
 
 - [x] Project Description
 - [ ] Run App
-- [ ] Finish App
+- [ ] Finish App  
 
 
 
@@ -24,54 +24,55 @@ Utilizamos principalmente Node e Express. No banco de dados utilizamos MongoDB (
 
 - [x] Project Description
 - [x] Run App
-- [ ] Finish App
+- [ ] Finish App  
 
 
 
 
-1. Baixar e instalar dependência node_modules:
+1. Baixar e instalar dependência node_modules:  
 
- - diretório: ./backend
+ - diretório: ./backend  
  
- > npm install
+ > npm install  
 
- - diretório: ./frontend
+ - diretório: ./frontend  
  
- > npm install
+ > npm install  
 
-2. Criar e configurar arquivo oculto .env, baseado com o arquivo modelo env_file:
+2. Criar e configurar arquivo oculto .env, baseado com o arquivo modelo env_file:  
 
- - diretório: ./backend/.env
- - diretório: ./backend/.env_file
-
-3. Criar as migrations:
-
- - diretório: ./backend
+ - diretório: ./backend/.env  
  
- > npx knex.migrate:latest
+ - diretório: ./backend/.env_file  
 
-4. Colocando para funcionar backend e Bancos de Dados:
+3. Criar as migrations:  
+
+ - diretório: ./backend  
  
- - É recomendo abrir no mínino três aba no terminal, uma para cada um desses comandos abaixo:
+ > npx knex.migrate:latest  
 
- - diretório: ./backend
+4. Colocando para funcionar backend e Bancos de Dados:  
+ 
+ - É recomendo abrir no mínino três aba no terminal, uma para cada um desses comandos abaixo:  
 
- > sudo psql -U postgres (necessita de postgres client instalado)
+ - diretório: ./backend  
 
- > sudo mongod (necessita do mongo client instalado)
+ > sudo psql -U postgres (necessita de postgres client instalado)  
 
- > npm start (esse deve ser o último comando)
+ > sudo mongod (necessita do mongo client instalado)  
 
-5. Colacando o frontend para funcionar:
+ > npm start (esse deve ser o último comando)  
 
-  - diretório: ./frontend
+5. Colacando o frontend para funcionar:  
+
+  - diretório: ./frontend  
   
-  > sudo npm start
+  > sudo npm start      
 
 
 
 
-** App ainda em desenvolvimento.
+** App ainda em desenvolvimento.      
 
 
 
