@@ -63,7 +63,7 @@ Utilizamos principalmente Node e Express. No banco de dados utilizamos MongoDB (
 
  > npm start (esse deve ser o último comando)  
 
-5. Colacando o frontend para funcionar:  
+5. Colocando o frontend para funcionar:  
 
   - diretório: ./frontend  
   
