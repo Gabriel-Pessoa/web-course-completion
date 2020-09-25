@@ -1,6 +1,6 @@
 # Knowledge Base
 
-## Gif of the Project
+## Gif of Project
 ![](./appImages/WebProject.gif?w=512)
 
 # 
