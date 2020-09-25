@@ -10,7 +10,7 @@ import UserAdmin from './UserAdmin';
 
 import './styles.css';
 
-const AdminPages = (props) => {
+const AdminPages = () => {
 
     return (
         <div className="admin-page">

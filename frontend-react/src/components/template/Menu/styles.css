@@ -1,8 +1,39 @@
 .menu {
     grid-area: menu;
     background: linear-gradient(to right, #232526, #414345);
+    color: #fff;
     
     display: flex;
     flex-direction: column;
     flex-wrap: wrap; /*permite quebra de linha*/
+}
+
+.menu .Mui-selected > .MuiTreeItem-content,
+.menu .Mui-selected > .MuiTreeItem-content:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu .menu-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 20px;
+    /* padding-bottom: 8px; */
+    border-bottom: 1px solid #AAA;
+}
+
+.menu .menu-filter i {
+    font-size: 25px;
+    color: #AAA;
+    margin-right: 10px;
+}
+
+.menu input {
+    color: #CCC;
+    font-size: 1.3rem;
+    border: 0;
+    outline: 0;
+    width: 100%;
+    background: transparent;
 }

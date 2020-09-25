@@ -3,7 +3,7 @@ import Routes from '../../../main/Routes';
 
 import './styles.css';
 
-const Content = (props) => {
+const Content = () => {
     return (
         <div className="content">
             <Routes />

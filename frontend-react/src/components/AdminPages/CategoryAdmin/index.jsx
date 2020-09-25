@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { baseApiUrl, showError } from '../../../global';
+import { baseApiUrl, showError, showSuccess } from '../../../global';
 import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { FaPen, FaTrash } from 'react-icons/fa';
 
@@ -13,16 +13,20 @@ const CategoryAdmin = (props) => {
     const [category, setCategory] = useState({});
     const [categories, setCategories] = useState([]);
 
+
+    //função que carrega as categorias
     async function loadCategories() {
         await axios.get(`${baseApiUrl}/categories`).then(response => {
             setCategories(response.data);
         });
     }
 
+
     //executa a função apenas uma vez na montagem do componente
     useEffect(() => {
         loadCategories();
     }, [])
+
 
     // função que salva e altera categoria
     async function save() {
@@ -31,28 +35,24 @@ const CategoryAdmin = (props) => {
 
         await axios[method](`${baseApiUrl}/categories${id}`, category)
             .then(() => {
-                alert('Processo realizado com sucesso!');
+                showSuccess();
                 reset();
             })
-            .catch((e) => {
-                const messageError = showError(e);
-                alert(`Erro no processo: ${messageError}!`);
-            })
+            .catch(showError);
     }
+
 
     // função que remove categoria
     async function remove() {
         const id = category.id;
         await axios.delete(`${baseApiUrl}/categories/${id}`)
             .then(() => {
-                alert('Processo realizado com sucesso!');
+                showSuccess();
                 reset();
             })
-            .catch((e) => {
-                const messageError = showError(e);
-                alert(`Erro no processo: ${messageError}!`);
-            })
+            .catch(showError);
     }
+
 
     // função que reset dados e formulário.
     function reset() {
@@ -61,11 +61,13 @@ const CategoryAdmin = (props) => {
         loadCategories();
     }
 
+
     // função que carrega dados da categoria selecionado no formlário, tanto para excluir, como para alterar
     function loadCategory(category, mode = 'save') {
         setMode(mode);
         setCategory(category);
     }
+
 
     // função que trata dos inputs do formulário
     function handleInputChange(event) {
@@ -74,6 +76,7 @@ const CategoryAdmin = (props) => {
         setCategory({ ...category, [name]: value });
     }
 
+
     // variável com atribuição condicional para button salvar ou remover
     let buttonSaveOrRemove;
     if (mode === 'save') {
@@ -81,6 +84,7 @@ const CategoryAdmin = (props) => {
     } else if (mode === 'remove') {
         buttonSaveOrRemove = <Button className="mb-3" variant="danger" onClick={remove}>Excluir</Button>
     }
+
 
     return (
         <div className="category-admin">
@@ -103,7 +107,7 @@ const CategoryAdmin = (props) => {
                         <Col xs="12">
                             <Form.Label>Categoria Pai:</Form.Label>
                             <Form.Control as="select" name="parentId" id="category-parentId" onChange={handleInputChange}
-                                value={category.id || '0'}>
+                                value={category.parentId || '0'}>
 
                                 <option value="0">Selecione:</option>
 

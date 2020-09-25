@@ -60,7 +60,7 @@ module.exports = app => {
         }
     }
 
-    const limit = 3; //limite de arquivo por página
+    const limit = 10; //limite de arquivo por página
 
     //função que retorna dados para paginação no frontend
     const get = async (req, res) => {

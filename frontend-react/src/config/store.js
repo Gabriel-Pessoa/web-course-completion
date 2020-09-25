@@ -4,34 +4,51 @@
  */
 
 import { createStore } from 'redux'; // Criar um estado global
+import axios from 'axios';
+
 
 const INITIAL_STATE = {
-    header: { title: "Cod3r - Base de Conhecimento" },
-    stateComponents: {
-        hideToggle: false,
-        hideUserDropdown: false
-    },
-    user: {
-        name: 'Usuário Mock',
-        email: 'mock@cod3r.com.br'
-    }
-}
+    isMenuVisible: false,
+    user: null
+};
 
 function reducer(state = INITIAL_STATE, action) {
+    switch (action.type) {
+        case 'TOOGLE_MENU':
 
-   if (action.type === 'HIDE_MENU') {
-       return;
-   }
-
-    if (action.type === 'TOOGLE_MENU') {
-        return {
-            ...state, stateComponents: {
-                hideToggle: !action.hideToggle,
-                hideUserDropdown: state.stateComponents.hideUserDropdown
+            // condição que captura quando usuário não está setado
+            if (!state.user) {
+                state.isMenuVisible = false;
+                return state;
             }
-        };
+
+            if (action.isVisible === undefined) {
+                state.isMenuVisible = !state.isMenuVisible;
+
+            } else {
+                state.isMenuVisible = action.isVisible;
+            }
+
+            return state;
+
+        case 'SET_USER':
+
+            state.user = action.user
+
+            if (action.user) {
+                axios.defaults.headers.common['Authorization'] = `bearer ${action.user.token}`;
+                state.isMenuVisible = true;
+
+            } else {
+                delete axios.defaults.headers.common['Authorization'];
+                state.isMenuVisible = false;
+            }
+            
+            return state;
+
+        default:
+            return state;
     }
-    return state;
 }
 
 const store = createStore(reducer); // precisa de uma função como parâmetro obrigatório que retorna o estado inicial

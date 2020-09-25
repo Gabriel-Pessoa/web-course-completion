@@ -1,14 +1,14 @@
-function toggleMenu(hideToggle) {
+function toggleMenu(isVisible) {
     return {
         type: 'TOOGLE_MENU',
-        hideToggle
-    };
-}
-
-function hideDropdown(isVisible) {
-    return {
-        type: 'HIDE_MENU',
         isVisible
     };
 }
-module.exports = {toggleMenu, hideDropdown} 
+
+function setUser(user) {
+    return {
+        type: 'SET_USER',
+        user
+    };
+}
+module.exports = {toggleMenu, setUser} 

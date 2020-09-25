@@ -1,4 +1,9 @@
+import swal from 'sweetalert'; // popup de alertas
+
+
 export const baseApiUrl = 'http://localhost:3001';
+
+export const userKey = '__knowledge_user';
 
 export function showError(e) {
     let msg;
@@ -9,7 +14,22 @@ export function showError(e) {
     } else {
         msg = 'Sem detalhes!';
     }
-    return msg;
+
+    //return msg;
+    return swal({
+        title: 'Erro no processo!',
+        text: msg,
+        icon: 'error',
+        dangerMode: true
+    });
 }
 
-export default { baseApiUrl, showError}
+export function showSuccess() {
+    return swal({
+        title: 'Processo realizado com Sucesso!',
+        icon: 'success',
+        dangerMode: false
+    });
+}
+
+export default { baseApiUrl, showError, userKey, showSuccess }

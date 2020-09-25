@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import axios from 'axios';
-import { baseApiUrl, showError } from '../../../global';
-import { Form, Table, Row, Col, Button } from 'react-bootstrap';
+import { baseApiUrl, showError, showSuccess } from '../../../global';
+
+import { Form, Table, Row, Col, Button, Pagination } from 'react-bootstrap';
 import { FaPen, FaTrash } from 'react-icons/fa';
 
 //Editor
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 import './styles.css';
 
@@ -23,6 +25,7 @@ const ArticleAdmin = (props) => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(0);
     const [count, setCount] = useState(0);
+
 
     // objeto de configuração do editor de texto
     const editorConfiguration = {
@@ -42,14 +45,18 @@ const ArticleAdmin = (props) => {
         language: 'pt-br'
     };
 
+
     // função que carrega os artigos, setando também as variáveis count e limit, usadas para paginação
-    async function loadArticles() {
-        await axios.get(`${baseApiUrl}/articles`).then(response => {
+    const loadArticles = useCallback(async () => {
+        await axios.get(`${baseApiUrl}/articles?page=${page}`).then(response => {
             setArticles(response.data.data);
-            setCount(response.data.count);
             setLimit(response.data.limit);
+            setCount(response.data.count);
+
         });
-    }
+    }, [page])
+
+
 
     // função que carrega as categorias
     async function loadCategories() {
@@ -57,6 +64,7 @@ const ArticleAdmin = (props) => {
             setCategories(response.data);
         });
     }
+
 
     // função que carrega os usuários, utilizado no formulário como autores.
     async function loadUsers() {
@@ -67,10 +75,12 @@ const ArticleAdmin = (props) => {
 
     // realiza a chamada apenas uma vez no momento da montagem do componente.
     useEffect(() => {
-        loadArticles();
         loadCategories();
         loadUsers();
+        setPage(1); // Uma segurança a mais, garantindo que a variável page seja setada, evitando erro em tempo de compilação
     }, []);
+
+
 
     // função que salva e altera artigo
     async function save() {
@@ -79,30 +89,28 @@ const ArticleAdmin = (props) => {
 
         const content = editorContent; // cópia do conteúdo do editor para ser enviado junto com o objeto article.
 
-        await axios[method](`${baseApiUrl}/articles${id}`, { ...article, content })
+        const data = { ...article, content }; // agrupa dados do formulário com o conteúdo do editor para persistir na api.
+
+        await axios[method](`${baseApiUrl}/articles${id}`, data)
             .then(() => {
-                alert('Processo realizado com sucesso!');
+                showSuccess();
                 reset();
             })
-            .catch((e) => {
-                const messageError = showError(e);
-                alert(`Erro no processo: ${messageError}!`);
-            })
+            .catch(showError);
     }
+
 
     // função que remove artigo
     async function remove() {
         const id = article.id;
         await axios.delete(`${baseApiUrl}/articles/${id}`)
             .then(() => {
-                alert('Processo realizado com sucesso!');
+                showSuccess();
                 reset();
             })
-            .catch((e) => {
-                const messageError = showError(e);
-                alert(`Erro no processo: ${messageError}!`);
-            })
+            .catch(showError);
     }
+
 
     // função que reset dados e formulário.
     function reset() {
@@ -111,6 +119,7 @@ const ArticleAdmin = (props) => {
         setArticle({});
         loadArticles();
     }
+
 
     // função que carrega dados do artigo selecionado no formulário, tanto para excluir, como para alterar
     async function loadArticle(article, mode = 'save') { // Atentar para essa função
@@ -136,6 +145,7 @@ const ArticleAdmin = (props) => {
             });
     }
 
+
     // função que trata dos inputs do formulário
     function handleInputChange(event) {
         const { name, value } = event.target;
@@ -143,12 +153,14 @@ const ArticleAdmin = (props) => {
         setArticle({ ...article, [name]: value });
     }
 
+
     // função que trata do dados inseridos no editor, guardando numa variável para ser persistido na api posteriormente.
     function handleEditorChange(event, editor) {
         const content = editor.getData();
 
         setEditorContent(content);
     }
+
 
     // variável com atribuição condicional para button salvar ou remover
     let buttonSaveOrRemove;
@@ -158,6 +170,55 @@ const ArticleAdmin = (props) => {
         buttonSaveOrRemove = <Button className="mb-3" variant="danger" onClick={remove}>Excluir</Button>
     }
 
+    //Paginação
+    let items = [];
+    let active = page;
+
+    //função que calcula a quantidade de páginas
+    const qtdPages = (limit, count) => {
+        let limitPerPage = limit;
+        let qtdFiles = count;
+        let result = 0;
+
+        while (qtdFiles > 0) {
+            result++;
+            qtdFiles -= limitPerPage;
+        }
+        return result || 1;
+    };
+
+    
+    // montagem do elemento de paginação ao final da página.
+    for (let number = 1; number <= qtdPages(limit, count); number++) {
+        items.push(
+            <Pagination.Item
+                key={number}
+                active={number === active}
+                onClick={() => handlePagination(number)}
+            >
+                {number}
+            </Pagination.Item>
+        )
+    }
+    const paginationBasic = (
+        <div>
+            <Pagination>{items}</Pagination>
+            <br />
+        </div>
+    );
+
+    // Função que trata da mudança do seletor de páginas
+    function handlePagination(page) {
+        setPage(page);
+    }
+
+    /*Efeitos que é executado a cada mudança da variável page,
+     chamando a função loadArticles carregando a página setada*/
+    useEffect(() => {
+        loadArticles();
+    }, [loadArticles]);
+
+   
     return (
         <div className="article-admin">
             <Form>
@@ -243,7 +304,7 @@ const ArticleAdmin = (props) => {
                         <th>Código</th>
                         <th>Nome</th>
                         <th>Descrição</th>
-                        <th>Ações</th>
+                        <th className="align-to-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -253,7 +314,7 @@ const ArticleAdmin = (props) => {
                             <td>{article.id}</td>
                             <td>{article.name}</td>
                             <td>{article.description}</td>
-                            <td>
+                            <td className="align-to-center">
                                 <Button variant="warning" onClick={() => loadArticle(article)} className="mr-2">
                                     <FaPen />
                                 </Button>
@@ -266,6 +327,7 @@ const ArticleAdmin = (props) => {
 
                 </tbody>
             </Table>
+            {paginationBasic}
         </div>
     );
 }

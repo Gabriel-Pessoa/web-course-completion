@@ -1,0 +1,9 @@
+.articles-by-category ul {
+    list-style-type: none;
+    padding: 0px;
+}
+
+.articles-by-category .load-more {
+    text-align: center;
+    margin-top: 25px;
+}

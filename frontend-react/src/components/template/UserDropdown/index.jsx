@@ -1,15 +1,33 @@
 import React from 'react';
 
-import { connect } from 'react-redux'
-import { Dropdown } from 'react-bootstrap'
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../../../config/actions';
+import { Dropdown } from 'react-bootstrap';
 import { FiCpu, FiLogOut } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Gravatar from 'react-gravatar';
+import { userKey } from '../../../global';
+
 import './styles.css';
 
-const UserDropdown = ({ state }) => {
+const UserDropdown = (props) => {
 
-    const user = state.user; // atribuindo usuário atual
+    const user = useSelector(state => state.user); // atribuindo usuário atual, recebido do redux
+
+    const dispatch = useDispatch(); // encaminha ação para o redux, que é tratada no arquivo store
+
+    //instanciando da função do router-dom, que servirá para encaminhar para o artigo selecionado na árvore.
+    let history = useHistory();
+
+
+    // função que desloga usuário atual
+     function logout(event) {
+        event.preventDefault();
+        localStorage.removeItem(userKey);
+        dispatch(setUser(null));
+         history.push('/auth', { from: props.location });
+    }
+
 
     return (
         <Dropdown className="user-dropdown">
@@ -22,23 +40,25 @@ const UserDropdown = ({ state }) => {
 
             <Dropdown.Menu className="user-dropdown-content" >
 
-                <Dropdown.Item className="link-item">
-                    <Link to='/admin'>
-                        <FiCpu className="mr-2" />
-                        <span>Administração</span>
-                    </Link>
-                </Dropdown.Item>
+                {user.admin &&
+                    <div className="link-item dropdown-item" role="button">
+                        <Link to='/admin'>
+                            <FiCpu className="mr-2" />
+                            <span>Administração</span>
+                        </Link>
+                    </div>
+                }
 
-                <Dropdown.Item className="link-item">
-                    <Link to='/signout'>
+                <div className="link-item dropdown-item" role="button">
+                    <Link to="/auth" onClick={logout}>
                         <FiLogOut className="mr-2" />
                         <span>Sair</span>
                     </Link>
-                </Dropdown.Item>
+                </div>
 
             </Dropdown.Menu>
         </Dropdown>
     );
 }
 
-export default connect(store => ({ state: store }))(UserDropdown);
+export default UserDropdown;

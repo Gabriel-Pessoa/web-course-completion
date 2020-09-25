@@ -1,0 +1,8 @@
+.loading {
+    /*Ocupa a mesma área do content. Será usado uma
+      lógica para os dois não aparecerem no mesmo tempo*/
+    grid-area: content;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}

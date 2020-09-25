@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { baseApiUrl, showError } from '../../../global';
+import { baseApiUrl, showError, showSuccess } from '../../../global';
 import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { FaPen, FaTrash } from 'react-icons/fa';
 
@@ -33,13 +33,10 @@ const UserAdmin = (props) => {
 
        await axios[method](`${baseApiUrl}/users${id}`, user)
             .then(() => {
-                alert('Processo realizado com sucesso!');
+                showSuccess();
                 reset();
             })
-            .catch((e) => {
-                const messageError = showError(e);
-                alert(`Erro no processo: ${messageError}!`);
-            })
+            .catch(showError);
     }
 
     // função que exclui usuário
@@ -47,13 +44,10 @@ const UserAdmin = (props) => {
         const id = user.id;
        await axios.delete(`${baseApiUrl}/users/${id}`)
             .then(() => {
-                alert('Processo realizado com sucesso!');
+                showSuccess();
                 reset();
             })
-            .catch((e) => {
-                const messageError = showError(e);
-                alert(`Erro no processo: ${messageError}!`);
-            })
+            .catch(showError);
     }
 
     // função que invoca função de chamada à api resetando o formulário para estado inicial e mode para 'save'

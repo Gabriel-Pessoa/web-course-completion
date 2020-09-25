@@ -1,0 +1,21 @@
+Melhorias:
+
+1)Backend:
+
+1.1 Paginação nos usuários e categorias.
+
+1.2 Criar serviço para validar se usuário é administrador.
+
+2)Frontend:
+
+2.1 Possibilidade de ordenar artigos, usuários e categorias.
+
+2.2 Páginação nos usuários e categorias
+
+2.3 Tela de esqueci minha senha, que envia a senha para o email cadastrado.
+
+2.4 Expandir a árvore de artigos para dispositivos pequenos e médios.
+
+2.5 Melhorar o editor de artigo, incluir os plugins de Código e Highlight.
+
+2.6 Consertar alguns "Warnings" que estão aparecendo no console.
